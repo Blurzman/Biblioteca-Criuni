@@ -1,0 +1,236 @@
+@startuml Biblioteca Criuni
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 80
+
+package Util {
+    abstract class Cancellable {
+        # {static} checkCancel(input: String) : void
+    }
+
+    class CancelException {
+        + CancelException()
+    }
+
+    CancelException --|> java.util.concurrent.CancellationException
+}
+
+package Model {
+    together {
+        class Book {
+            - uuid : String
+            - title : String
+            - author : String
+            - yearOfPublishing : Year
+            - publisher : String
+            - stock : int
+            + isAvailable() : boolean
+            + toString() : String
+        }
+
+        class Student {
+            - document : String
+            - name : String
+            - email : String
+            - phoneNumber : String
+            - birthDate : LocalDate
+            - faculty : Faculty
+            + toString() : String
+        }
+
+        enum Faculty {
+            MEDICINE
+            ENGINEERING
+            HUMANITIES
+            SCIENCE
+            ECONOMICS
+            LAWSCIENCE
+            AGRONOMY
+            + getDisplayName() : String
+        }
+    }
+
+    class Loan {
+        - {static} nextId : int
+        - {static} LOAN_DAYS : int
+        - {static} FINE_RATE : double
+        - {static} BASE_FINE : double
+        - id : String
+        - loanDate : LocalDate
+        - dueDate : LocalDate
+        - returnDate : LocalDate
+        - fine : long
+        + isReturned() : boolean
+        + isOverdue() : boolean
+        + calculateFine() : long
+        + toString() : String
+    }
+
+    Loan -right-> Student : student
+    Loan -down-> Book : books
+    Student -right-> Faculty : faculty
+}
+
+package Data {
+    interface BaseData<T> {
+        + add(item: T) : void
+        + remove(item: T) : void
+        + get(id: String) : T
+        + getAll() : Collection<T>
+    }
+
+    together {
+        class BookData {
+            - books : HashMap<String, Book>
+        }
+
+        class StudentData {
+            - students : HashMap<String, Student>
+        }
+
+        class LoanData {
+            - loans : HashMap<String, Loan>
+        }
+    }
+
+    BookData ..|> BaseData
+    StudentData ..|> BaseData
+    LoanData ..|> BaseData
+
+    BookData -down-> Book : almacena
+    StudentData -down-> Student : almacena
+    LoanData -down-> Loan : almacena
+}
+
+package View {
+    interface BaseView<T> {
+        + showError(message: String) : void
+        + showAll(items: Collection<T>) : void
+    }
+
+    interface EditableView {
+        + askEditOption() : String
+    }
+
+    together {
+        class BookView {
+            + askTitle() : String
+            + askAuthor() : String
+            + askYearOfPublishing() : String
+            + askPublisher() : String
+            + askStock() : String
+            + askDeltaStock() : String
+            + askUuid() : String
+        }
+
+        class StudentView {
+            + askName() : String
+            + askDocument() : String
+            + askEmail() : String
+            + askNumber() : String
+            + askBirthDate() : String
+            + askFaculty() : String
+        }
+
+        class LoanView {
+            + askStudentDocument() : String
+            + askBookUuid() : String
+            + askLoanId() : String
+            + showFine(fine: long) : void
+        }
+    }
+
+    BookView ..|> BaseView
+    BookView ..|> EditableView
+    StudentView ..|> BaseView
+    StudentView ..|> EditableView
+    LoanView ..|> BaseView
+}
+
+package Controller {
+    interface BaseController {
+        + register() : void
+        + remove() : void
+        + showAll() : void
+    }
+
+    interface EditableController {
+        + edit() : void
+    }
+
+    together {
+        class BookController {
+            + register() : void
+            + edit() : void
+            + remove() : void
+            + showAll() : void
+            + changeStock(book: Book) : void
+        }
+
+        class StudentController {
+            + register() : void
+            + edit() : void
+            + remove() : void
+            + showAll() : void
+        }
+
+        class LoanController {
+            + register() : void
+            + remove() : void
+            + removeReturned() : void
+            + returnLoan() : void
+            + showAll() : void
+        }
+    }
+
+    BookController --|> Cancellable
+    StudentController --|> Cancellable
+    LoanController --|> Cancellable
+
+    BookController ..|> BaseController
+    BookController ..|> EditableController
+    StudentController ..|> BaseController
+    StudentController ..|> EditableController
+    LoanController ..|> BaseController
+
+    BookController -right-> BookView : view
+    BookController -down-> BookData : data
+
+    StudentController -right-> StudentView : view
+    StudentController -down-> StudentData : data
+
+    LoanController -right-> LoanView : view
+    LoanController -down-> StudentData : studentData
+    LoanController -down-> BookData : bookData
+    LoanController -down-> LoanData : loanData
+}
+
+together {
+    class Menu {
+        - {static} SCANNER : Scanner
+        - {static} STUDENTS_FILE : String
+        - {static} BOOKS_FILE : String
+        - {static} LOANS_FILE : String
+        + {static} start() : void
+        - {static} mainMenu() : void
+        - {static} bookMenu() : void
+        - {static} studentMenu() : void
+        - {static} loanMenu() : void
+        - {static} save() : void
+    }
+
+    class Main {
+        + {static} main(args: String[]) : void
+    }
+}
+
+Menu --|> Cancellable
+Menu -down-> BookController
+Menu -down-> StudentController
+Menu -down-> LoanController
+Main -right-> Menu : start()
+
+@enduml
