@@ -4,7 +4,8 @@ import data.BookData;
 import model.Book;
 import util.CancelException;
 import util.Cancellable;
-import View.BookView;
+import view.BookViewCLI;
+import view.IBookView;
 
 import java.time.DateTimeException;
 import java.time.Year;
@@ -12,13 +13,13 @@ import java.time.Year;
 /**
  * controller for book operations.
  * Handles registration, editing, and stock management of books,
- * coordinating between {@link View.BookView} and {@link data.BookData}.
+ * coordinating between {@link BookViewCLI} and {@link data.BookData}.
  *
  * @author Samuel
  */
 public class BookController extends Cancellable implements BaseController, EditableController {
-    public BookController(BookData data){
-        this.view = new BookView();
+    public BookController(IBookView view, BookData data){
+        this.view = view;
         this.data = data;
     }
 
@@ -240,7 +241,7 @@ public class BookController extends Cancellable implements BaseController, Edita
     }
 
 
-    private BookView  view = null;
+    private IBookView view = null;
     private BookData data = null;
 
 }

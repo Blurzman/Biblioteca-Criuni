@@ -1,4 +1,4 @@
-package View;
+package view;
 
 /**
  * Interface for views that support edit operations.

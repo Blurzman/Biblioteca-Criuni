@@ -5,7 +5,8 @@ import model.Faculty;
 import model.Student;
 import util.CancelException;
 import util.Cancellable;
-import View.StudentView;
+import view.IStudentView;
+import view.StudentViewCLI;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,13 +15,13 @@ import java.time.format.DateTimeParseException;
 /**
  * controller for student operations.
  * Handles registration and editing of students,
- * coordinating between {@link View.StudentView} and {@link data.StudentData}.
+ * coordinating between {@link StudentViewCLI} and {@link data.StudentData}.
  *
  * @author Samuel
  */
 public class StudentController extends Cancellable implements BaseController, EditableController{
-    public StudentController(StudentData data) {
-        this.view = new StudentView();
+    public StudentController(IStudentView view, StudentData data) {
+        this.view = view;
         this.data = data;
     }
     /**
@@ -242,7 +243,7 @@ public class StudentController extends Cancellable implements BaseController, Ed
         } while (!valid);
     }
 
-    private StudentView view = null;
+    private IStudentView view = null;
     private StudentData data = null;
 
 

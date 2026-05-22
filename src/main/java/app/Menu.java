@@ -6,6 +6,10 @@ import controller.StudentController;
 import data.*;
 import util.CancelException;
 import util.Cancellable;
+import view.BookViewCLI;
+import view.LoanViewCLI;
+import view.StudentViewCLI;
+
 import java.io.*;
 
 import java.util.Scanner;
@@ -19,14 +23,21 @@ import java.util.Scanner;
 public class Menu extends Cancellable {
     private Menu(){}
 
+    public enum Mode{CLI, GUI}
+
 
     /**
      * Starts the mainMenu.
      *
      * @author Samuel
      */
-    public static void start(){
-            mainMenu();
+    public static void start(Mode mode){
+        if (mode == Mode.CLI) {
+            BOOK_CONTROLLER     = new BookController(new BookViewCLI(),BOOK_DATA);
+            STUDENT_CONTROLLER  = new StudentController(new StudentViewCLI(),STUDENT_DATA);
+            LOAN_CONTROLLER     = new LoanController(STUDENT_DATA, BOOK_DATA, LOAN_DATA, new LoanViewCLI());
+        }
+        mainMenu();
     }
 
 
@@ -272,7 +283,8 @@ public class Menu extends Cancellable {
     private static final BookData BOOK_DATA = load(BOOKS_FILE, new BookData());
     private static final LoanData LOAN_DATA = load(LOANS_FILE, new LoanData());
 
-    private static final StudentController STUDENT_CONTROLLER = new StudentController(STUDENT_DATA);
-    private static final BookController BOOK_CONTROLLER = new BookController(BOOK_DATA);
-    private static final LoanController LOAN_CONTROLLER = new LoanController(STUDENT_DATA, BOOK_DATA, LOAN_DATA);
+    private static StudentController STUDENT_CONTROLLER;
+    private static BookController BOOK_CONTROLLER;
+    private static LoanController LOAN_CONTROLLER;
 }
+

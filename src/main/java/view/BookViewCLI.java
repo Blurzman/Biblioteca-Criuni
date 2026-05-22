@@ -12,8 +12,8 @@ import java.util.Scanner;
  *
  * @author Samuel
  */
-public class BookView implements BaseView<Book>, EditableView {
-    public BookView(){
+public class BookViewCLI implements IBookView {
+    public BookViewCLI(){
         this.sc = new Scanner(System.in);
     }
 

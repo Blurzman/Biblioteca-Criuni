@@ -8,7 +8,7 @@ import model.Loan;
 import model.Student;
 import util.CancelException;
 import util.Cancellable;
-import View.LoanView;
+import view.ILoanView;
 
 
 import java.util.ArrayList;
@@ -22,11 +22,11 @@ import java.util.List;
  * @author Samuel
  */
 public class LoanController extends Cancellable implements BaseController{
-    public LoanController(StudentData studentData, BookData bookData, LoanData data){
+    public LoanController(StudentData studentData, BookData bookData, LoanData data, ILoanView view){
         this.studentData = studentData;
         this.bookData = bookData;
-        this.view = new LoanView();
         this.data = data;
+        this.view = view;
     }
 
     /**
@@ -188,7 +188,7 @@ public class LoanController extends Cancellable implements BaseController{
 
     private StudentData studentData;
     private BookData bookData;
-    private LoanView view;
+    private ILoanView view;
     private LoanData data;
 
 }

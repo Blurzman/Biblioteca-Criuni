@@ -12,9 +12,9 @@ import java.util.Scanner;
  *  Type "salir" at any prompt to cancel the current operation
  * @author Samuel
  */
-public class StudentView implements BaseView<Student>, EditableView {
+public class StudentViewCLI implements IStudentView {
 
-    public StudentView(){
+    public StudentViewCLI(){
         this.sc = new Scanner(System.in);
     }
 

@@ -12,8 +12,8 @@ import java.util.Scanner;
  *
  * @author Samuel
  */
-public class LoanView implements BaseView<Loan>{
-    public LoanView(){
+public class LoanViewCLI implements ILoanView{
+    public LoanViewCLI(){
         sc = new Scanner(System.in);
     }
 
