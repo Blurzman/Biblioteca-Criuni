@@ -82,11 +82,11 @@ public class BookViewCLI implements IBookView {
     }
 
     /**
-     * @return Raw input for the book UUID.
+     * @return Raw input for the book ISBN-13.
      * @author Samuel
      */
-    public String askUuid() {
-        System.out.println("Ingrese el uuid del libro por favor: ");
+    public String askIsbn() {
+        System.out.println("Ingrese el ISBN-13 del libro por favor: ");
         return sc.nextLine();
     }
 

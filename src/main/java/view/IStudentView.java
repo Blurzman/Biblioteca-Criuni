@@ -2,7 +2,12 @@ package view;
 
 import model.Student;
 
-public interface IStudentView extends BaseView<Student>, EditableView { String askName();
+import java.util.Collection;
+
+public interface IStudentView extends EditableView {
+    void showError(String message);
+    void showAll(Collection<Student> students);
+    String askName();
     String askDocument();
     String askEmail();
     String askNumber();

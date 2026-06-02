@@ -12,6 +12,7 @@ import view.ILoanView;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -87,6 +88,17 @@ public class LoanController extends Cancellable implements BaseController{
         view.showAll(data.getAll());
     }
 
+    /**
+     *
+     * @return All overdue loans
+     * @author Samuel
+     */
+    public Collection<Loan> getOverdue() {
+        return data.getAll().stream()
+                .filter(Loan::isOverdue)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
 
     /**
      * Prompts until a valid student document is entered and sets the student on the loan.
@@ -122,14 +134,14 @@ public class LoanController extends Cancellable implements BaseController{
         while (true) {
             boolean valid = false;
             do {
-                String uuid = view.askBookUuid();
-                checkCancel(uuid);
+                String isbn = view.askBookIsbn();
+                checkCancel(isbn);
                 try {
-                    if (uuid.equalsIgnoreCase("hecho")){
+                    if (isbn.equalsIgnoreCase("hecho")){
                         loan.setBooks(books);
                         return;
                     }
-                    Book book = bookData.get(uuid);
+                    Book book = bookData.get(isbn);
                     if (!book.isAvailable()){
                         view.showError("El libro no esta disponible");
                         continue;

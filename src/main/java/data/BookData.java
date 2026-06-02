@@ -24,8 +24,8 @@ public class BookData implements BaseData<Book>, Serializable {
      * @author Samuel
      */
     public void add(Book book){
-        if (!books.containsKey(book.getUuid())){
-            books.put(book.getUuid(),book);
+        if (!books.containsKey(book.getIsbn())){
+            books.put(book.getIsbn(),book);
         } else {
             throw new IllegalArgumentException("Error inesperado. Intentelo de nuevo"); // Shouldn't ever happen
         }
@@ -37,8 +37,8 @@ public class BookData implements BaseData<Book>, Serializable {
      * @author Samuel
      */
     public void remove(Book book){
-        if (books.containsKey(book.getUuid())){
-            books.remove(book.getUuid());
+        if (books.containsKey(book.getIsbn())){
+            books.remove(book.getIsbn());
         } else {
             throw new IllegalArgumentException("Ese libro no existe"); // Shouldn't happen either
         }

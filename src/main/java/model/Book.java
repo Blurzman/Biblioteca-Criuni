@@ -3,7 +3,6 @@ package model;
 
 import java.io.Serializable;
 import java.time.Year;
-import java.util.UUID;
 
 /**
  * Represents a book in the library.
@@ -13,9 +12,7 @@ import java.util.UUID;
  */
 public class Book implements Serializable {
 
-    public Book(){
-        setUuid();
-    }
+    public Book(){}
 
     public String getTitle() {
         return title;
@@ -85,12 +82,21 @@ public class Book implements Serializable {
         }
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setUuid() {
-        this.uuid = UUID.randomUUID().toString();
+    /**
+     * @param isbn ISBN-13 of the book. Must be exactly 13 digits.
+     * @throws IllegalArgumentException if the format is invalid.
+     * @author Samuel
+     */
+    public void setIsbn(String isbn) {
+        if (isbn.matches("^[0-9]{13}$")) {
+            this.isbn = isbn;
+        } else {
+            throw new IllegalArgumentException("ISBN invalido. Debe tener 13 digitos");
+        }
     }
 
     public int getStock(){
@@ -121,7 +127,7 @@ public class Book implements Serializable {
     @Override
     public String toString(){
         return String.format("[%s] Titulo: %-20s | Autor: %-20s | %s | Editorial: %-10s | (%d)",
-                uuid, title, author, yearOfPublishing.toString(), publisher, stock);
+                isbn, title, author, yearOfPublishing.toString(), publisher, stock);
     }
 
     public static final String ALPHASPACES = "^[a-zA-Z ]+$";
@@ -130,6 +136,6 @@ public class Book implements Serializable {
     private String author = null;
     private Year yearOfPublishing = null;
     private String publisher = null;
-    private String uuid = null;
+    private String isbn = null;
     private int stock = 0;
 }

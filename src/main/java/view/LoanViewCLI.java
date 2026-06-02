@@ -30,7 +30,7 @@ public class LoanViewCLI implements ILoanView{
      * @return A book UUID, or "hecho" to finish adding books, or "salir" to cancel.
      * @author Samuel
      */
-    public String askBookUuid(){
+    public String askBookIsbn(){
         System.out.println("Ingrese el uuid del libro que desea (Escriba \"hecho\" para terminar): ");
         return sc.nextLine();
     }

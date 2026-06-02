@@ -2,9 +2,13 @@ package view;
 
 import model.Loan;
 
-public interface ILoanView extends BaseView<Loan> {
+import java.util.Collection;
+
+public interface ILoanView {
+    void showError(String message);
+    void showAll(Collection<Loan> loans);
     String askStudentDocument();
-    String askBookUuid();
+    String askBookIsbn();
     String askLoanId();
     void showFine(long fine);
 }

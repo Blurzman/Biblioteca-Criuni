@@ -2,12 +2,16 @@ package view;
 
 import model.Book;
 
-public interface IBookView extends BaseView<Book>, EditableView{
+import java.util.Collection;
+
+public interface IBookView extends EditableView {
+    void showError(String message);
+    void showAll(Collection<Book> books);
     String askTitle();
     String askAuthor();
     String askYearOfPublishing();
     String askPublisher();
     String askStock();
     String askDeltaStock();
-    String askUuid();
+    String askIsbn();
 }

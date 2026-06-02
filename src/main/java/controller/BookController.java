@@ -33,6 +33,7 @@ public class BookController extends Cancellable implements BaseController, Edita
     public void register(){
         Book book = new Book();
         try {
+            registerIsbn(book);
             registerTitle(book);
             registerAuthor(book);
             registerYearOfPublishing(book);
@@ -52,10 +53,10 @@ public class BookController extends Cancellable implements BaseController, Edita
      */
     @Override
     public void edit() {
-        String uuid = view.askUuid();
+        String isbn = view.askIsbn();
         try {
-            checkCancel(uuid);
-            Book book = data.get(uuid);
+            checkCancel(isbn);
+            Book book = data.get(isbn);
             String option = view.askEditOption();
             checkCancel(option);
             switch (Integer.parseInt(option)) {
@@ -96,9 +97,9 @@ public class BookController extends Cancellable implements BaseController, Edita
         boolean valid = false;
         do{
             try {
-                String uuid = view.askUuid();
-                checkCancel(uuid);
-                Book book = data.get(uuid);
+                String isbn = view.askIsbn();
+                checkCancel(isbn);
+                Book book = data.get(isbn);
                 data.remove(book);
                 valid = true;
             } catch (IllegalArgumentException | CancelException e){
@@ -135,6 +136,25 @@ public class BookController extends Cancellable implements BaseController, Edita
                 valid = true;
             } catch (NumberFormatException e) {
                 view.showError("Ingrese un numero valido por favor");
+            } catch (IllegalArgumentException e) {
+                view.showError(e.getMessage());
+            }
+        } while (!valid);
+    }
+
+    /**
+     * Prompts until a valid ISBN-13 is entered and sets it on the book.
+     *
+     * @author Samuel
+     */
+    private void registerIsbn(Book book){
+        boolean valid = false;
+        do{
+            String isbn = view.askIsbn();
+            checkCancel(isbn);
+            try {
+                book.setIsbn(isbn);
+                valid = true;
             } catch (IllegalArgumentException e) {
                 view.showError(e.getMessage());
             }

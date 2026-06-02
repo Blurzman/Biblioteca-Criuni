@@ -1,14 +1,18 @@
 package app;
 
 import controller.BookController;
+import controller.BookGuiController;
 import controller.LoanController;
+import controller.LoanGuiController;
 import controller.StudentController;
+import controller.StudentGuiController;
 import data.*;
 import util.CancelException;
 import util.Cancellable;
 import view.BookViewCLI;
 import view.LoanViewCLI;
 import view.StudentViewCLI;
+import view.Window;
 
 import java.io.*;
 
@@ -33,11 +37,17 @@ public class Menu extends Cancellable {
      */
     public static void start(Mode mode){
         if (mode == Mode.CLI) {
-            BOOK_CONTROLLER     = new BookController(new BookViewCLI(),BOOK_DATA);
-            STUDENT_CONTROLLER  = new StudentController(new StudentViewCLI(),STUDENT_DATA);
-            LOAN_CONTROLLER     = new LoanController(STUDENT_DATA, BOOK_DATA, LOAN_DATA, new LoanViewCLI());
+            BOOK_CONTROLLER = new BookController(new BookViewCLI(), BOOK_DATA);
+            STUDENT_CONTROLLER = new StudentController(new StudentViewCLI(), STUDENT_DATA);
+            LOAN_CONTROLLER = new LoanController(STUDENT_DATA, BOOK_DATA, LOAN_DATA, new LoanViewCLI());
+            mainMenu();
+        }else {
+            Window gui = new Window();
+            StudentGuiController studentGui = new StudentGuiController(STUDENT_DATA);
+            BookGuiController    bookGui    = new BookGuiController(BOOK_DATA);
+            LoanGuiController    loanGui    = new LoanGuiController(STUDENT_DATA, BOOK_DATA, LOAN_DATA);
+            gui.init(bookGui, studentGui, loanGui, Menu::save);
         }
-        mainMenu();
     }
 
 
